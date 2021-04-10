@@ -1,51 +1,58 @@
-using System;
 using UnityEngine;
 
-public class PCInputController
+[RequireComponent(typeof(Player))]
+public class PCInputController : MonoBehaviour
 {
-    private ServiceManager _serviceManager;
-    
-    public Action<Vector3, Collider> LeftPointerClickedHandler = delegate {  };
-
+    private Player _player;
     private Camera _camera;
-    private bool _lMouseBtnClicked;
 
-    public PCInputController()
+    private Canvas _debugCanvas;
+    private GameObject _helpPanel;
+    
+    private void Start()
     {
-        _serviceManager = ServiceManager.Instance;
-        _serviceManager.UpdateHandler += OnUpdate;
-        _serviceManager.LateUpdateHandler += OnLateUpdate;
-        _serviceManager.FixedUpdateHandler += OnFixedUpdate;
-        _serviceManager.DestroyHandler += OnDestroy;
-
         _camera = Camera.main;
+
+        _player = GetComponent<Player>();
+        _debugCanvas = FindObjectOfType<Canvas>();
+        _helpPanel = _debugCanvas.transform.GetChild(_debugCanvas.transform.childCount - 1).gameObject;
     }
 
-    private void OnUpdate()
+    private void Update()
     {
-        _lMouseBtnClicked = Input.GetMouseButton(0);
-    }
-
-    private void OnLateUpdate()
-    {
-        
-    }
-
-    private void OnFixedUpdate()
-    {
-        if (_lMouseBtnClicked)
+        if (Input.GetKeyDown(KeyCode.I))
         {
-            RaycastHit info;
-            if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out info, 100))
-                LeftPointerClickedHandler(info.point, info.collider);
-        }
-    }
+            if (!_debugCanvas.gameObject.activeInHierarchy)
+            {
+                _debugCanvas.gameObject.SetActive(true);
+                return;
+            }
 
-    private void OnDestroy()
-    {
-        _serviceManager.UpdateHandler -= OnUpdate;
-        _serviceManager.LateUpdateHandler -= OnLateUpdate;
-        _serviceManager.FixedUpdateHandler -= OnFixedUpdate;
-        _serviceManager.DestroyHandler -= OnDestroy;
+            if (_debugCanvas.gameObject.activeInHierarchy)
+            {
+                if(_helpPanel.activeInHierarchy)
+                    _helpPanel.SetActive(false);
+                
+                _debugCanvas.gameObject.SetActive(false);
+            }
+
+            // _debugCanvas.gameObject.SetActive(!_debugCanvas.gameObject.activeInHierarchy);
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            if(_debugCanvas.gameObject.activeInHierarchy)
+                _helpPanel.SetActive(!_helpPanel.activeInHierarchy);
+        }
+        
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit info, 100))
+            {
+                _player.ActionController.OnLeftPointerClicked(info.point, info.collider);
+            }
+        }
     }
 }
