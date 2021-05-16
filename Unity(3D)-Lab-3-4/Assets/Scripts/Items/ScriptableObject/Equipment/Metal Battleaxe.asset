@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 429f288c86f6dcc4f9634fa491ac1ef8, type: 3}
+  m_Name: Metal Battleaxe
+  m_EditorClassIdentifier: 
+  id: 2004
+  name: Metal Battleaxe
+  description: Battle axe with a well-sharpened blade
+  stack: 1
+  inventoryIcon: {fileID: 21300000, guid: 68710c26f0fa66d4ca2360d7344b145c, type: 3}
+  owner: {fileID: 0}
+  requiredLvl: 2
+  primaryStats:
+  - StatType: 1
+    Amount: 25
+    IncreaseType: 0
+  - StatType: 2
+    Amount: 5
+    IncreaseType: 0
+  - StatType: 3
+    Amount: 5
+    IncreaseType: 0
+  equipmentType: 1
+  rarityLvl: 2
+  additionalStats: []
