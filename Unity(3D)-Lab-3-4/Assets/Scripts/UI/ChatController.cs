@@ -102,7 +102,7 @@ public class ChatController : MonoBehaviour
                 Destroy(tmpText.gameObject, destroyTime);
                 return true;
             case "/name":
-                try
+				try
                 {
                     player.StatController.SetNickname(message.Substring(command.Length + 1));
                 }
