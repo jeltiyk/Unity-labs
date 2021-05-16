@@ -91,7 +91,6 @@ public class ChatController : MonoBehaviour
         switch (command)
         {
             case "/help":
-
                 tmpText = Instantiate(tmpTextPrefab.GetComponent<TMP_Text>(), tmpTextPrefab.transform.parent);
                 tmpText.color = Color.yellow;
                 tmpText.SetText("[" + DateTime.Now.ToString("t") + "]: Use \"/lvl %lvl count%\" to set lvl.");
@@ -103,7 +102,18 @@ public class ChatController : MonoBehaviour
                 Destroy(tmpText.gameObject, destroyTime);
                 return true;
             case "/name":
-                player.StatController.SetNickname(message.Substring(command.Length + 1));
+                try
+                {
+                    player.StatController.SetNickname(message.Substring(command.Length + 1));
+                }
+                catch (Exception e)
+                {
+                    tmpText = Instantiate(tmpTextPrefab.GetComponent<TMP_Text>(), tmpTextPrefab.transform.parent);
+                    tmpText.color = Color.red;
+                    tmpText.SetText("[" + DateTime.Now.ToString("t") + "]: Enter value through space after command.");
+                    Destroy(tmpText.gameObject, destroyTime);
+                    return true;
+                }
 
                 if (message.Substring(command.Length + 1).Length > 20)
                 {
@@ -113,7 +123,16 @@ public class ChatController : MonoBehaviour
                     Destroy(tmpText.gameObject, destroyTime);
 
                     return true;
-                }                    
+                }
+                else if(message.Substring(command.Length + 1).Length < 4)
+                {
+                    tmpText = Instantiate(tmpTextPrefab.GetComponent<TMP_Text>(), tmpTextPrefab.transform.parent);
+                    tmpText.color = Color.red;
+                    tmpText.SetText("[" + DateTime.Now.ToString("t") + "]: Very short nickname. Min length is 4 chars.");
+                    Destroy(tmpText.gameObject, destroyTime);
+
+                    return true;
+                }
                 
                 tmpText = Instantiate(tmpTextPrefab.GetComponent<TMP_Text>(), tmpTextPrefab.transform.parent);
                 tmpText.color = Color.green;
@@ -121,7 +140,23 @@ public class ChatController : MonoBehaviour
                 Destroy(tmpText.gameObject, destroyTime);
                 return true;
             case "/lvl":
-                player.StatController.SetLvl(message.Substring(command.Length + 1));
+                int lvl;
+                
+                try
+                {
+                    lvl = Convert.ToInt32(message.Substring(command.Length + 1));
+                }
+                catch (Exception e)
+                {
+                    tmpText = Instantiate(tmpTextPrefab.GetComponent<TMP_Text>(), tmpTextPrefab.transform.parent);
+                    tmpText.color = Color.red;
+                    tmpText.SetText("[" + DateTime.Now.ToString("t") + "]: Enter number value through space after command.");
+                    Destroy(tmpText.gameObject, destroyTime);
+                    
+                    return true;
+                }
+                
+                player.StatController.SetLvl(lvl.ToString());
                 
                 tmpText = Instantiate(tmpTextPrefab.GetComponent<TMP_Text>(), tmpTextPrefab.transform.parent);
                 tmpText.color = Color.green;
